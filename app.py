@@ -2,34 +2,35 @@ import streamlit as st
 import pandas as pd
 import openai
 
-# Function to generate full-stack code using OpenAI API
+# Function to generate full-stack code using OpenAI API (chat-based)
 def generate_code_with_openai(metadata_df, frontend, backend, database, data_fetch, interface_type, api_key):
     metadata_columns = "\n".join([f"- {col}" for col in metadata_df['Column Name']])
     
     prompt = f"""
-    Generate full-stack code for a {interface_type} interface with {frontend}, {backend}, and {database}.
-    Metadata columns: {metadata_columns}
-    Backend setup: {backend} with {database}
-    Frontend setup: {frontend}
-    Data fetching method: {data_fetch}
+    You are an AI developer assistant. Generate full-stack code for a {interface_type} interface with {frontend}, {backend}, and {database}.
+    The following are the metadata columns: {metadata_columns}.
+    Backend setup should use {backend} with {database}.
+    Frontend setup should use {frontend}.
+    The data fetching method should be {data_fetch}.
     """
 
     # Use OpenAI API to generate code
     openai.api_key = api_key
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant for generating code."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=1000,
-        n=1,
-        stop=None,
         temperature=0.5,
     )
     
-    generated_code = response.choices[0].text.strip()
+    generated_code = response['choices'][0]['message']['content'].strip()
     return generated_code
 
 def main():
-    st.title("Full-Stack Code Generator with OpenAI API")
+    st.title("Full-Stack Code Generator")
 
     st.write("Upload metadata, select your tech stack, and generate full-stack code using OpenAI's API.")
 
