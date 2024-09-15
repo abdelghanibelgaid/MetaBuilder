@@ -30,7 +30,7 @@ def generate_code_with_openai(metadata_df, frontend, backend, database, data_fet
     return generated_code
 
 def main():
-    st.title("Full-Stack Code Generator with OpenAI API")
+    st.title("MetaBuilder")
 
     st.write("Upload metadata, select your tech stack, and generate full-stack code using OpenAI's API.")
 
