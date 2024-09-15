@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import openai
 
-# Function to generate full-stack code using OpenAI API (chat-based)
+# Function to generate full-stack code using the updated OpenAI API
 def generate_code_with_openai(metadata_df, frontend, backend, database, data_fetch, interface_type, api_key):
     metadata_columns = "\n".join([f"- {col}" for col in metadata_df['Column Name']])
     
@@ -14,10 +14,12 @@ def generate_code_with_openai(metadata_df, frontend, backend, database, data_fet
     The data fetching method should be {data_fetch}.
     """
 
-    # Use OpenAI API to generate code
+    # Set the OpenAI API key
     openai.api_key = api_key
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+    
+    # Generate the code using the updated OpenAI Completion API
+    response = openai.completions.create(
+        model="gpt-3.5-turbo",  # or use "gpt-4" if available
         messages=[
             {"role": "system", "content": "You are a helpful assistant for generating code."},
             {"role": "user", "content": prompt}
@@ -30,7 +32,7 @@ def generate_code_with_openai(metadata_df, frontend, backend, database, data_fet
     return generated_code
 
 def main():
-    st.title("Full-Stack Code Generator")
+    st.title("Full-Stack Code Generator with OpenAI API")
 
     st.write("Upload metadata, select your tech stack, and generate full-stack code using OpenAI's API.")
 
